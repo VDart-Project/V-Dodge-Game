@@ -1,11 +1,18 @@
 # initalizations
-import random
 import pygame
 import os
+import random
+from pygame import *
 pygame.init()
 
 # clock cycle
 clock = pygame.time.Clock()
+
+# music
+mixer.music.load('Undertale_Megalovania.mp3')
+mixer.music.play(-1)
+hit_sound = mixer.Sound('explosion.wav')
+hit_sound.play()
 
 # image basics, constant throughout
 screen = pygame.display.set_mode((800, 600))
@@ -14,10 +21,10 @@ icon = pygame.image.load('spaceship.png')
 pygame.display.set_icon(icon)
 
 # home screen background information
-hs_bg = pygame.image.load(os.path.join('pygame_background.png')).convert()
-hs_bg1 = pygame.image.load(os.path.join('pygame_background.png')).convert()
+hs_bg = pygame.image.load('pygame_background.png')
 hs_bgX = 0
 hs_bgX2 = hs_bg.get_width()
+mid = pygame.image.load('vdart_al.png')
 
 # background information
 bg = pygame.image.load(os.path.join('bg1.png')).convert()
@@ -90,19 +97,29 @@ level_up = 0
 
 # MAIN WHILE LOOP
 while running_game:
-    # redrawWindow()
     clock.tick(speed)
     clock.tick(speed)
     
     # home screen
     if start:
         screen.fill((0, 0, 0))
-        screen.blit(hs_bg1, (0, 0))
-        screen.blit(hs_font.render("Welcome to V-Dodge", True, (255, 24, 130)), (180, 250))
-        print_next = hs_font.render("Game will begin shortly", True, (255, 24, 130))
-        screen.blit(print_next, (150, 300))
+        screen.blit(hs_bg, (0, 0))
+        screen.blit(hs_font.render("VDart Digital Presents: V-Dodge", True, (255, 24, 130)), (60, 80))
+        screen.blit(hs_font.render("Your game will begin shortly", True, (255, 24, 130)), (110, 130))
+        screen.blit(r_font.render("Credits to: Angel, Tarun, Abiali, and Zahra", True, (255, 24, 130)), (180, 200))
+        screen.blit(mid, (300, 250))
+        # screen.blit(hs_font.render("Press Spacebar to Start", True, (255, 24, 130)), (150, 400))
+        screen.blit(r_font.render("Objective: Dodge the asteroids and prove you are a true VDartian", True, (255, 24, 130)), (53, 500))
+        screen.blit(r_font.render("Controls: up arrow to travel up and down arrow to travel down", True, (255, 24, 130)), (65, 550))
         pygame.display.update()
-        while delay < 50000:
+        # Next = pygame.key.get_pressed()
+        # if Next[pygame.K_SPACE]:
+        #     winning = True
+        #     start = False
+        # else:
+        #     winning = False
+        #     start = True
+        while delay < 700000:
             delay += 1
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -114,6 +131,7 @@ while running_game:
 
     # checks if the game has be exited
     while winning:
+
         for event in pygame.event.get():
             # exit button check
             if event.type == pygame.QUIT:
@@ -175,6 +193,8 @@ while running_game:
                 score += 1
         for i in range(num_asteroid):
             if ((asteroidY[i] >= playerY and (asteroidY[i]) <= (playerY + 35)) and (asteroidX[i] >= playerX and (asteroidX[i]) <= (playerX + 60))):
+                hit_sound = mixer.Sound('explosion.wav')
+                hit_sound.play()
                 winning = False
                 for i in range(num_asteroid):
                     asteroidX[i] = 800
